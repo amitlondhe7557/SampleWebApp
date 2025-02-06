@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        JAVA_HOME = "/usr/lib/jvm/java-11-openjdk-amd64"  // Set Java home if required
+        JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"  // Set Java home if required
         MAVEN_HOME = "/usr/share/maven"
         TOMCAT_USER = "admin"  // Tomcat manager username
         TOMCAT_PASS = "admin"  // Tomcat manager password
