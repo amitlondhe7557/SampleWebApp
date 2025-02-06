@@ -6,7 +6,7 @@ pipeline {
         MAVEN_HOME = "/usr/share/maven"
         TOMCAT_USER = "admin"  // Tomcat manager username
         TOMCAT_PASS = "admin"  // Tomcat manager password
-        TOMCAT_URL = "http://54.175.156.210:8080/"  // Change this to your Tomcat server IP
+//        TOMCAT_URL = "http://54.175.156.210:8080/"  // Change this to your Tomcat server IP
     }
 
     stages {
@@ -25,13 +25,17 @@ pipeline {
         stage('Deploy to Tomcat') {
             steps {
                 script {
-                    def warFile = "target/SampleWebApp.war"
+                def warFile = "target/SampleWebApp.war"
+                def tomcatUrl = "http://54.175.156.210:8080"
 
-                    // Deploy WAR using Tomcat Manager API
-                    sh """
-                    curl --upload-file ${warFile} --user ${TOMCAT_USER}:${TOMCAT_PASS} \
-                    ${TOMCAT_URL}/manager/text/deploy?path=/SampleWebApp&update=true
-                    """
+            echo "Deploying ${warFile} to Tomcat at ${tomcatUrl}"
+
+            // Use curl to deploy WAR via Tomcat Manager API
+            sh """
+                curl -v --user ${TOMCAT_USER}:${TOMCAT_PASS} \
+                --upload-file ${warFile} \
+                "${tomcatUrl}/manager/text/deploy?path=/SampleWebApp&update=true"
+            """
                 }
             }
         }
