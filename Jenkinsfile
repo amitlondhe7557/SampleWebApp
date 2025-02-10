@@ -8,7 +8,7 @@ pipeline {
         TOMCAT_PASS = "admin"  
         TOMCAT_URL = "http://3.87.79.249:9090"
         WAR_FILE = "target/SampleWebApp.war"
-        CONTEXT_PATH = "/SampleWebApp"
+        CONTEXT_PATH = "SampleWebApp"
     }
 
     stages {
