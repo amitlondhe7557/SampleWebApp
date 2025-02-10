@@ -2,11 +2,13 @@ pipeline {
     agent any
 
     environment {
-        JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"  // Set Java home if required
+        JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"  
         MAVEN_HOME = "/usr/share/maven"
-        TOMCAT_USER = "admin"  // Tomcat manager username
-        TOMCAT_PASS = "admin"  // Tomcat manager password
-//        TOMCAT_URL = "http://3.87.79.249:9090/"  // Change this to your Tomcat server IP
+        TOMCAT_USER = "admin"  
+        TOMCAT_PASS = "admin"  
+        TOMCAT_URL = "http://3.87.79.249:9090"
+        WAR_FILE = "target/SampleWebApp.war"
+        CONTEXT_PATH = "/SampleWebApp"
     }
 
     stages {
@@ -22,20 +24,27 @@ pipeline {
             }
         }
 
+        stage('Undeploy Previous Version') {
+            steps {
+                script {
+                    echo "Undeploying previous application from ${TOMCAT_URL}"
+                    sh """
+                        curl -v --user ${TOMCAT_USER}:${TOMCAT_PASS} \
+                        "${TOMCAT_URL}/manager/text/undeploy?path=${CONTEXT_PATH}"
+                    """
+                }
+            }
+        }
+
         stage('Deploy to Tomcat') {
             steps {
                 script {
-                def warFile = "target/SampleWebApp.war"
-                def tomcatUrl = "http://3.87.79.249:9090"
-
-            echo "Deploying ${warFile} to Tomcat at ${tomcatUrl}"
-
-            // Use curl to deploy WAR via Tomcat Manager API
-            sh """
-                curl -v --user ${TOMCAT_USER}:${TOMCAT_PASS} \
-                --upload-file ${warFile} \
-                "${tomcatUrl}/manager/text/deploy?path=/SampleWebApp&update=true"
-            """
+                    echo "Deploying ${WAR_FILE} to Tomcat at ${TOMCAT_URL}"
+                    sh """
+                        curl -v --user ${TOMCAT_USER}:${TOMCAT_PASS} \
+                        --upload-file ${WAR_FILE} \
+                        "${TOMCAT_URL}/manager/text/deploy?path=${CONTEXT_PATH}"
+                    """
                 }
             }
         }
