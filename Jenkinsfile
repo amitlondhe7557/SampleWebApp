@@ -36,15 +36,16 @@ pipeline {
             }
         }
 
+
         stage('Deploy to Tomcat') {
             steps {
                 script {
-                    echo "Deploying ${WAR_FILE} to Tomcat at ${TOMCAT_URL}"
-                    sh """
-                        curl -v --user ${TOMCAT_USER}:${TOMCAT_PASS} \
-                        --upload-file ${WAR_FILE} \
-                        "${TOMCAT_URL}/manager/text/deploy?path=${CONTEXT_PATH}"
-                    """
+                    def response = sh(script: 'curl -v --user admin:admin --upload-file target/SampleWebApp.war http://3.87.79.249:9090/manager/text/deploy?path=/SampleWebApp&update=true', returnStdout: true).trim()
+                    if (response.contains("FAIL")) {
+                        error("Deployment failed: ${response}")
+                    } else {
+                        echo "Deployment successful!"
+                    }
                 }
             }
         }
