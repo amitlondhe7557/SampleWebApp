@@ -6,7 +6,7 @@ pipeline {
         MAVEN_HOME = "/usr/share/maven"
         TOMCAT_USER = "admin"  // Tomcat manager username
         TOMCAT_PASS = "admin"  // Tomcat manager password
-//        TOMCAT_URL = "http://54.175.156.210:8080/"  // Change this to your Tomcat server IP
+//        TOMCAT_URL = "http://3.87.79.249:9090/"  // Change this to your Tomcat server IP
     }
 
     stages {
