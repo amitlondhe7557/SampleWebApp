@@ -26,7 +26,7 @@ pipeline {
             steps {
                 script {
                 def warFile = "target/SampleWebApp.war"
-                def tomcatUrl = "http://54.175.156.210:8080"
+                def tomcatUrl = "http://3.87.79.249:9090"
 
             echo "Deploying ${warFile} to Tomcat at ${tomcatUrl}"
 
